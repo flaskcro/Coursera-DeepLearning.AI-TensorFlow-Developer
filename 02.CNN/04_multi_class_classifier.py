@@ -1,9 +1,9 @@
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.callbacks import EarlyStopping, TensorBoard
 import os
-import shutil
+
 
 def get_data(filename):
     with open(filename) as training_file:
@@ -69,7 +69,7 @@ model.compile(optimizer=tf.keras.optimizers.Adam(lr=0.001, beta_1=0.9, beta_2=0.
 history = model.fit(train_generator,
                     validation_data=validation_generator,
                     epochs=100,
-                    callbacks=[EarlyStopping(patience=3, monitor='val_accuracy')],
+                    callbacks=[EarlyStopping(patience=5, monitor='val_loss'), TensorBoard(log_dir='./log', histogram_freq=1)],
                     verbose=2)
 
 if not os.path.isdir('model'):
